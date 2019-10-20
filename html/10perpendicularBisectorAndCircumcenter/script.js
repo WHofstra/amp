@@ -103,7 +103,7 @@ function getRandomColor()
  }
 
  window.addEventListener('click', (evt)=>{
-  console.log(R);
+  //console.log(R);
  })
 
  function justDrawCircle(dot, ab, bc, ac){
