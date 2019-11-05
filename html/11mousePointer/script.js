@@ -4,21 +4,24 @@ const context = canvas.getContext('2d');
 const width = window.innerWidth;
 const height = window.innerHeight;
 
+const differVar = 100;
+const arrowLength = new Vector2d(65, 40);
+const arrowHeight = new Vector2d(10, 20);
+
 canvas.width = width;
 canvas.height = height;
 
-let A = new Arrow(new Vector2d((width/5 * 1), (height/5 * 1)),
- new Vector2d(180, 50), new Vector2d(10, 20),
- "#00F4FF", "#FFFFFF", "#0000FF", "#00F4FF", 270, true);
-let B = new Arrow(new Vector2d((width/5 * 4), (height/5 * 1)),
- new Vector2d(180, 50), new Vector2d(10, 20),
- "#A6FF00", "#FFFFFF", "#00FF00", "#A6FF00", 270, true);
-let C = new Arrow(new Vector2d((width/5 * 1), (height/5 * 4)),
- new Vector2d(180, 50), new Vector2d(10, 20),
- "#FF0000", "#FFFFFF", "#960000", "#FF0000", 270, true);
-let D = new Arrow(new Vector2d((width/5 * 4), (height/5 * 4)),
- new Vector2d(180, 50), new Vector2d(10, 20),
- "#800060", "#FFFFFF", "#530080", "#800060", 270, true);
+let A = new Arrow(new Vector2d((width/2 - differVar), (height/2 - differVar)),
+ arrowLength, arrowHeight, getRandomColor(),
+ getRandomColor(), getRandomColor(), getRandomColor(), 270, true);
+let B = new Arrow(new Vector2d((width/2 + differVar), (height/2 - differVar)),
+ arrowLength, arrowHeight, A.color1, A.color2, A.color3, A.color4, 270, true);
+let C = new Arrow(new Vector2d((width/2 - differVar), (height/2 + differVar)),
+ arrowLength, arrowHeight, A.color1, A.color2, A.color3, A.color4, 270, true);
+let D = new Arrow(new Vector2d((width/2 + differVar), (height/2 + differVar)),
+ arrowLength, arrowHeight, A.color1, A.color2, A.color3, A.color4, 270, true);
+let E = new Arrow(new Vector2d((width/2), (height/2)),
+ arrowLength, arrowHeight, A.color1, A.color2, A.color3, A.color4, 270, true);
 
 function animate(){
 
@@ -27,6 +30,7 @@ function animate(){
 
    A.draw(context);
    B.draw(context);
+   E.draw(context);
    C.draw(context);
    D.draw(context);
 }
