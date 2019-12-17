@@ -7,47 +7,37 @@ const height = window.innerHeight;
 canvas.width = width;
 canvas.height = height;
 
-let A = new Arrow(new Vector2d(0, 0), new Vector2d(65, 40), new Vector2d(10, 20),
-  getRandomColor(), getRandomColor(), getRandomColor(), getRandomColor(), 270);
-let B = new DPoint(new Vector2d(getRandom(canvas.width), getRandom(canvas.height)), 20,
-  getRandomColor(), getRandomColor(), new Vector2d(220, getRandomMin(30, 400)), 10, true);
-let C = new Arrow(new Vector2d(0, 0), new Vector2d(65, 40), new Vector2d(10, 20),
-  getRandomColor(), getRandomColor(), getRandomColor(), getRandomColor(), 270);
-let D = new DPoint(new Vector2d(getRandom(canvas.width), getRandom(canvas.height)), 20,
-  getRandomColor(), getRandomColor(), new Vector2d(220, getRandomMin(30, 400)), 10, true);
-let E = new Arrow(new Vector2d(0, 0), new Vector2d(65, 40), new Vector2d(10, 20),
-  getRandomColor(), getRandomColor(), getRandomColor(), getRandomColor(), 270);
-let F = new DPoint(new Vector2d(getRandom(canvas.width), getRandom(canvas.height)), 20,
-   getRandomColor(), getRandomColor(), new Vector2d(220, getRandomMin(30, 400)), 10, true);
+let arrows = [];
+let points = [];
+
+function start(){
+  for (let i = 0; i < 7; i++){
+    let A = new Arrow(new Vector2d(0, 0), new Vector2d(65, 40), new Vector2d(10, 20),
+      getRandomColor(), getRandomColor(), getRandomColor(), getRandomColor(), 270);
+    let B = new DPoint(new Vector2d(getRandom(canvas.width), getRandom(canvas.height)), 20,
+      getRandomColor(), getRandomColor(), new Vector2d(220, getRandomMin(30, 400)), 10, true);
+
+    arrows.push(A);
+    points.push(B);
+  }
+}
+
+start();
 
 function animate(){
   requestAnimationFrame(animate);
   context.clearRect(0, 0, canvas.width, canvas.height);
 
-  B.bounce(new Vector2d(canvas.width, canvas.height));
-  D.bounce(new Vector2d(canvas.width, canvas.height));
-  F.bounce(new Vector2d(canvas.width, canvas.height));
+  for (let i = 0; i < points.length; i++){
+    points[i].bounce(new Vector2d(canvas.width, canvas.height));
+    points[i].update();
+    arrows[i].position = points[i].position;
+    arrows[i].checkBall(points[i]);
+    arrows[i].shaftLength = (points[i].velocity.magnitude / 4);
 
-  B.update();
-  D.update();
-  F.update();
-  A.position = B.position;
-  C.position = D.position;
-  E.position = F.position;
-  A.checkBall(B);
-  C.checkBall(D);
-  E.checkBall(F);
-
-  A.shaftLength = (B.velocity.magnitude / 4);
-  C.shaftLength = (D.velocity.magnitude / 4);
-  E.shaftLength = (F.velocity.magnitude / 4);
-
-  A.draw(context);
-  B.draw(context);
-  C.draw(context);
-  D.draw(context);
-  E.draw(context);
-  F.draw(context);
+    arrows[i].draw(context);
+    points[i].draw(context);
+  }
 }
 
 animate();
