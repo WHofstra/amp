@@ -10,37 +10,34 @@ canvas.height = height;
 let centerRad = 200;
 let min = 0.2;
 
-let A = new DPoint(new Vector2d(getRandom(width), getRandom(height)), 25,
-                  getRandomColor(), getRandomColor(), new Vector2d(0, 0), new Vector2d(0, 0),
-                  false, "#FFFFFF");
-
-let B = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 0.9) * centerRad)),
+let A = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 0.9) * centerRad)),
                   (canvas.height/2 + (Math.sin(Math.PI * 0.9) * centerRad))), 20,
                   "#D0A304", "#FFDF00", '土');
-let C = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 1.7) * centerRad)),
+let B = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 1.7) * centerRad)),
                   (canvas.height/2 + (Math.sin(Math.PI * 1.7) * centerRad))), 20,
                   "#020202", "#18185C", '水', false,
-                  "#FFFFFF", B.lineClr2);
-let D = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 0.5) * centerRad)),
+                  "#FFFFFF", A.lineClr2);
+let C = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 0.5) * centerRad)),
                   (canvas.height/2 + (Math.sin(Math.PI * 0.5) * centerRad))), 20,
                   "#790600", "#FF2600", '火', false,
-                  "#FFFFFF", B.lineClr2);
-let E = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 1.3) * centerRad)),
+                  "#FFFFFF", A.lineClr2);
+let D = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 1.3) * centerRad)),
                   (canvas.height/2 + (Math.sin(Math.PI * 1.3) * centerRad))), 20,
                   "#B5D8E1", "#FDFDFD", '金', false,
-                  "#000000", B.lineClr2);
-let F = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 0.1) * centerRad)),
+                  "#000000", A.lineClr2);
+let E = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 0.1) * centerRad)),
                   (canvas.height/2 + (Math.sin(Math.PI * 0.1) * centerRad))), 20,
                   "#00794B", "#00BB96", '木', false,
-                  "#FFFFFF", B.lineClr2);
+                  "#FFFFFF", A.lineClr2);
 
+let F;
 let difference = new Vector2d(0, 0);
 let line;
 
 let points = [];
 let lines = [];
-
-let count;
+let dPoints = [];
+let count = [];
 
 function start(){
   /*for (let i = 0; i < 5; i++){
@@ -50,11 +47,11 @@ function start(){
     points.push(B);
   }*/
 
+  points.push(A);
   points.push(B);
   points.push(C);
   points.push(D);
   points.push(E);
-  points.push(F);
 
   for (let i = 0; i < points.length; i++){
 
@@ -69,11 +66,20 @@ function start(){
     lines.push(line);
   }
 
-  A.position.dx = points[0].position.dx;
-  A.position.dy = points[0].position.dy;
+  for (let i = 0; i < points.length; i++){
+    F = new DPoint(new Vector2d(getRandom(width), getRandom(height)), 15,
+                      getRandomColor(), getRandomColor(), new Vector2d(0, 0), new Vector2d(0, 0),
+                      false, "#FFFFFF");
+    dPoints.push(F);
 
-  count = 0;
-  changeVelocity(count);
+    dPoints[i].position.dx = points[i].position.dx;
+    dPoints[i].position.dy = points[i].position.dy;
+  }
+
+  for (let i = 0; i < dPoints.length; i++){
+    count[i] = i;
+    changeVelocity(count[i], dPoints[i]);
+  }
 }
 
 start();
@@ -90,28 +96,30 @@ function animate(){
   }
   A.velocity.scalarMul(1.1);*/
 
-  A.update();
-  A.color1 = getRandomColor();
-  A.color2 = getRandomColor();
+  for (let i = 0; i < dPoints.length; i++){
+    dPoints[i].update();
+    dPoints[i].color1 = getRandomColor();
+    dPoints[i].color2 = getRandomColor();
 
-    if (count < (points.length - 1)){
-      if (((points[count + 1].position.dx - A.position.dx) < min &&
-           (points[count + 1].position.dx - A.position.dx) > -min) &&
-          ((points[count + 1].position.dy - A.position.dy) < min &&
-           (points[count + 1].position.dy - A.position.dy) > -min)){
-        count++;
-        changeVelocity(count);
+    if (count[i] < (points.length - 1)){
+      if (((points[count[i] + 1].position.dx - dPoints[i].position.dx) < min &&
+           (points[count[i] + 1].position.dx - dPoints[i].position.dx) > -min) &&
+          ((points[count[i] + 1].position.dy - dPoints[i].position.dy) < min &&
+           (points[count[i] + 1].position.dy - dPoints[i].position.dy) > -min)){
+        count[i]++;
+        changeVelocity(count[i], dPoints[i]);
       }
     }
     else {
-      if (((points[0].position.dx - A.position.dx) < min &&
-           (points[0].position.dx - A.position.dx) > -min) &&
-          ((points[0].position.dy - A.position.dy) < min &&
-           (points[0].position.dy - A.position.dy) > -min)){
-        count = 0;
-        changeVelocity(count);
+      if (((points[0].position.dx - dPoints[i].position.dx) < min &&
+           (points[0].position.dx - dPoints[i].position.dx) > -min) &&
+          ((points[0].position.dy - dPoints[i].position.dy) < min &&
+           (points[0].position.dy - dPoints[i].position.dy) > -min)){
+        count[i] = 0;
+        changeVelocity(count[i], dPoints[i]);
       }
     }
+  }
 
   for (let i = 0; i < points.length; i++){
     if (i < (points.length - 1)){
@@ -133,7 +141,10 @@ function animate(){
   for (let i = 0; i < lines.length; i++){
     lines[i].draw(context);
   }
-  A.draw(context);
+
+  for (let i = 0; i < dPoints.length; i++){
+    dPoints[i].draw(context);
+  }
 
   for (let i = 0; i < points.length; i++){
     points[i].draw(context);
@@ -142,14 +153,15 @@ function animate(){
 
 animate();
 
-function changeVelocity(c){
+function changeVelocity(c, point){
+
   if (c < (points.length - 1)){
-    A.velocity.differenceVector(points[c + 1].position, A.position);
+    point.velocity.differenceVector(points[c + 1].position, point.position);
   }
   else {
-    A.velocity.differenceVector(points[0].position, A.position);
+    point.velocity.differenceVector(points[0].position, point.position);
   }
-  A.velocity.scalarMul(0.75);
+  point.velocity.scalarMul(0.75);
 }
 
 function getRandom(max){
