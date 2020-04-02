@@ -47,10 +47,10 @@ function animate(){
 
     vector.dx = C.position.dx - A.position.dx;
     vector.dy = C.position.dy - A.position.dy;
-    tan.dx = B.position.dx - A.position.dx;
-    tan.dy = B.position.dy - A.position.dy;
-    rad.dx = -B.position.dy + A.position.dy;
-    rad.dy = B.position.dx - A.position.dx;
+    tan.dx    = B.position.dx - A.position.dx;
+    tan.dy    = B.position.dy - A.position.dy;
+    rad.dx   = -B.position.dy + A.position.dy;
+    rad.dy    = B.position.dx - A.position.dx;
 
     tan.magnitude = 1;
     rad.magnitude = 1;
@@ -61,7 +61,7 @@ function animate(){
     D.shaftLength = vector.magnitude - radius - 20;
     D.angle = (Math.atan2(vector.dy, vector.dx) / Math.PI * 180);
 
-    //Tangent
+    //Tangerial
     E.shaftLength = tan.magnitude - radius - 20;
     E.angle = (Math.atan2(tan.dy, tan.dx) / Math.PI * 180);
 

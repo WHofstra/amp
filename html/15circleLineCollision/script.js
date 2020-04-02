@@ -7,16 +7,36 @@ const height = window.innerHeight;
 canvas.width = width;
 canvas.height = height;
 
+let scale = 0.8;
+let movPointRad = 30;
+let turn = false;
+
 let A = new Point(new Vector2d(getRandom(width), getRandom(height)), 10,
                   getRandomColor(), getRandomColor(), 'A', true);
 let B = new Point(new Vector2d(getRandom(width), getRandom(height)), A.radius,
                   A.color1, A.color2, 'B', true);
-let C = new DPoint(new Vector2d(getRandom(width), getRandom(height)), 15,
-                  getRandomColor(), getRandomColor(), new Vector2d(30, 70), 0);
-let S = new Point(new Vector2d(0, 0), 10, '#2C588F', '#FFFFFF', 'S', false);
+let C = new DPoint(new Vector2d(getRandom(width - (2 * movPointRad)) + movPointRad,
+                  getRandom(height - (2 * movPointRad)) + movPointRad), movPointRad,
+                  getRandomColor(), getRandomColor(),
+                  new Vector2d(getRandom(150) + 50, getRandom(150) + 50), 0);
+let S = new Point(new Vector2d(0, 0), A.radius, '#2C588F', '#FFFFFF', 'S', false);
 
 let a = new LinearFunction(1, 1);
 let s = new LinearFunction(1, 1);
+
+let vector = new Vector2d(C.velocity.dx * scale, C.velocity.dy * scale);
+let rad = new Vector2d(C.position.dx - S.position.dx, C.position.dy - S.position.dy);
+let tan = new Vector2d(1, 1);
+
+let D = new Arrow(C.position, new Vector2d(vector.magnitude - 20, 20),
+                  new Vector2d(C.radius * 0.5, C.radius * 0.5 + 10),
+                  getRandomColor(), getRandomColor(), getRandomColor(), getRandomColor());
+let E = new Arrow(C.position, new Vector2d(rad.magnitude - S.radius - 20, 20),
+                  new Vector2d(C.radius * 0.5, C.radius * 0.5 + 10),
+                  getRandomColor(), getRandomColor(), getRandomColor(), getRandomColor());
+let F = new Arrow(C.position, new Vector2d(tan.magnitude - 20, 20),
+                  new Vector2d(C.radius * 0.5, C.radius * 0.5 + 10),
+                  getRandomColor(), getRandomColor(), getRandomColor(), getRandomColor());
 
 function animate(){
     context.clearRect(0, 0, width, height);
@@ -37,9 +57,53 @@ function animate(){
     C.update();
     C.bounce(new Vector2d(canvas.width, canvas.height));
 
+    vector.dx = C.velocity.dx;
+    vector.dy = C.velocity.dy;
+    rad.dx    = C.position.dx - S.position.dx;
+    rad.dy    = C.position.dy - S.position.dy;
+    tan.dx   = -C.position.dy + S.position.dy;
+    tan.dy    = C.position.dx - S.position.dx;
+
+    if ((rad.magnitude - S.radius - C.radius) <= 0) {
+      //console.log("No.");
+      rad.dx    = - C.position.dx + S.position.dx;
+      rad.dy    = C.position.dy - S.position.dy;
+      vector.dx = (rad.dx + tan.dx);
+      vector.dy = (rad.dy + tan.dy);
+      turn = true;
+    }
+    else {
+      turn = false;
+    }
+
+    rad.magnitude = 1;
+    tan.magnitude = 1;
+    rad.magnitude = vector.dot(rad);
+    tan.magnitude = vector.dot(tan);
+
+    if (turn) {
+      //console.log("No.");
+
+      C.velocity.magnitude = rad.magnitude;
+    }//*/
+
+    //Vector
+    D.angle = (Math.atan2(vector.dy, vector.dx) / Math.PI * 180);
+
+    //Radial
+    E.shaftLength = rad.magnitude - S.radius;
+    E.angle = (Math.atan2(rad.dy, rad.dx) / Math.PI * 180);
+
+    //Tangerial
+    F.shaftLength = tan.magnitude - S.radius;
+    F.angle = (Math.atan2(tan.dy, tan.dx) / Math.PI * 180);
+
     a.draw(context);
     s.draw(context);
 
+    E.draw(context);
+    F.draw(context);
+    D.draw(context);
     A.draw(context);
     B.draw(context);
     C.draw(context);
