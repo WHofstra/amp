@@ -83,9 +83,8 @@ function animate(){
 
     if (turn) {
       //console.log("No.");
-
-      C.velocity.magnitude = rad.magnitude;
-    }//*/
+      C.velocity.magnitude = vector.magnitude;
+    }
 
     //Vector
     D.angle = (Math.atan2(vector.dy, vector.dx) / Math.PI * 180);
