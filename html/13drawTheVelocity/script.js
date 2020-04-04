@@ -9,6 +9,7 @@ canvas.height = height;
 
 let arrows = [];
 let points = [];
+let bounds = new Vector2d(canvas.width, canvas.height);
 
 function start(){
   for (let i = 0; i < 7; i++){
@@ -29,7 +30,7 @@ function animate(){
   context.clearRect(0, 0, canvas.width, canvas.height);
 
   for (let i = 0; i < points.length; i++){
-    points[i].bounce(new Vector2d(canvas.width, canvas.height));
+    points[i].bounce(bounds);
     points[i].update();
     arrows[i].position = points[i].position;
     arrows[i].checkBall(points[i]);

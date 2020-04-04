@@ -10,6 +10,7 @@ canvas.height = height;
 let scale = 0.8;
 let movPointRad = 30;
 let turn = false;
+let bounds = new Vector2d(canvas.width, canvas.height);
 
 let A = new Point(new Vector2d(getRandom(width), getRandom(height)), 10,
                   getRandomColor(), getRandomColor(), 'A', true);
@@ -55,7 +56,7 @@ function animate(){
     }
 
     C.update();
-    C.bounce(new Vector2d(canvas.width, canvas.height));
+    C.bounce(bounds);
 
     vector.dx = C.velocity.dx;
     vector.dy = C.velocity.dy;
