@@ -67,10 +67,6 @@ function animate(){
 
     if ((rad.magnitude - S.radius - C.radius) <= 0) {
       //console.log("No.");
-      rad.dx    = - C.position.dx + S.position.dx;
-      rad.dy    = C.position.dy - S.position.dy;
-      vector.dx = (rad.dx + tan.dx);
-      vector.dy = (rad.dy + tan.dy);
       turn = true;
     }
     else {
@@ -84,7 +80,14 @@ function animate(){
 
     if (turn) {
       //console.log("No.");
-      C.velocity.magnitude = vector.magnitude;
+      rad.dx    *= -1;
+      rad.dy    *= -1;
+      //tan.dx    *= -1;
+      //tan.dy    *= -1;
+      vector.dx = (rad.dx + tan.dx);
+      vector.dy = (rad.dy + tan.dy);
+      C.velocity.dx = vector.dx;
+      C.velocity.dy = vector.dy;
     }
 
     //Vector

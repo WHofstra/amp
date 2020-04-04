@@ -43,27 +43,26 @@ function animate(){
     rad.dy    = B.position.dy - A.position.dy;
     tan.dx   = -B.position.dy + A.position.dy;
     tan.dy    = B.position.dx - A.position.dx;
-
-    if ((rad.magnitude - B.radius - A.radius) <= 0)
-    {
-      rad.dx    = -B.position.dx + A.position.dx;
-      rad.dy    = B.position.dx - A.position.dx;
-      vector.dx = (rad.dx + tan.dx);
-      vector.dy = (rad.dy + tan.dy);
+/*
+    if ((rad.magnitude - B.radius - A.radius) <= 0) {
       turn = true;
-    }
-    else {
+    } else {
       turn = false;
-    }
+    }//*/
 
     rad.magnitude = 1;
     tan.magnitude = 1;
     rad.magnitude = vector.dot(rad);
     tan.magnitude = vector.dot(tan);
-
-    if (turn){
-      B.velocity.magnitude = vector.magnitude;
-    }
+/*
+    if (turn) {
+      rad.dx    *= -1;
+      rad.dy    *= -1;
+      vector.dx = (rad.dx + tan.dx);
+      vector.dy = (rad.dy + tan.dy);
+      B.velocity.dx = vector.dx;
+      B.velocity.dy = vector.dy;
+    }//*/
 
     //Vector
     C.angle = (Math.atan2(vector.dy, vector.dx) / Math.PI * 180);
