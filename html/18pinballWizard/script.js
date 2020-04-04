@@ -21,7 +21,7 @@ let ballColors = [ getRandomColor(), getRandomColor() ];
 let D = new DPoint(new Vector2d(getRandomMin(30, canvas.width/2 - 30),
                    getRandomMin(30, canvas.height/2 - 30)),
                    radius * 0.5, getRandomColor(), getRandomColor(),
-                   new Vector2d(getRandomMin(-1, 1) * 500, getRandomMin(-1, 1) * 500));
+                   new Vector2d(getRandomMin(-50, 50) * 10, getRandomMin(-50, 50) * 10));
 
 function pushBalls(array, xPos, yPos, number) {
   let B = new Point(new Vector2d(xPos, yPos), radius,
