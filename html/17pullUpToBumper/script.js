@@ -37,24 +37,24 @@ function animate(){
     context.clearRect(0, 0, width, height);
     requestAnimationFrame(animate);
 
-    vector.dx = B.velocity.dx * scale;
-    vector.dy = B.velocity.dy * scale;
+    vector.dx = B.velocity.dx;
+    vector.dy = B.velocity.dy;
     rad.dx    = B.position.dx - A.position.dx;
     rad.dy    = B.position.dy - A.position.dy;
     tan.dx   = -B.position.dy + A.position.dy;
     tan.dy    = B.position.dx - A.position.dx;
-/*
+
     if ((rad.magnitude - B.radius - A.radius) <= 0) {
       turn = true;
     } else {
       turn = false;
-    }//*/
+    }
 
     rad.magnitude = 1;
     tan.magnitude = 1;
     rad.magnitude = vector.dot(rad);
     tan.magnitude = vector.dot(tan);
-/*
+
     if (turn) {
       rad.dx    *= -1;
       rad.dy    *= -1;
@@ -62,17 +62,18 @@ function animate(){
       vector.dy = (rad.dy + tan.dy);
       B.velocity.dx = vector.dx;
       B.velocity.dy = vector.dy;
-    }//*/
+    }
 
     //Vector
+    C.shaftLength = vector.magnitude * scale;
     C.angle = (Math.atan2(vector.dy, vector.dx) / Math.PI * 180);
 
     //Radial
-    D.shaftLength = rad.magnitude - B.radius;
+    D.shaftLength = rad.magnitude * scale - B.radius;
     D.angle = (Math.atan2(rad.dy, rad.dx) / Math.PI * 180);
 
     //Tangerial
-    E.shaftLength = tan.magnitude - B.radius;
+    E.shaftLength = tan.magnitude * scale - B.radius;
     E.angle = (Math.atan2(tan.dy, tan.dx) / Math.PI * 180);
 
     B.update();
