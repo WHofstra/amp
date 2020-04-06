@@ -15,8 +15,15 @@ rowDistance = 4.2 * radius,
     beginY = 2 * radius;
 
 let bounds = new Vector2d(canvas.width, canvas.height);
+
+let vector = new Vector2d(0, 0);
+let rad = new Vector2d(0, 0);
+let tan = new Vector2d(0, 0);
+
+let turn;
 let dots = [];
 let ballColors = [ getRandomColor(), getRandomColor() ];
+let bumpArr = setup();
 
 let D = new DPoint(new Vector2d(getRandomMin(30, canvas.width/2 - 30),
                    getRandomMin(30, canvas.height/2 - 30)),
@@ -48,22 +55,57 @@ function setup() {
       k++;
     }
   }
+  return dots;
 }
 
 function animate() {
     context.clearRect(0, 0, width, height);
     requestAnimationFrame(animate);
 
-    for (let i = (dots.length - 1); i >= 0; i--){
-      dots[i].draw(context);
-    }
+    vector.dx = D.velocity.dx;
+    vector.dy = D.velocity.dy;
+
+    bumpArr.map((bumper, i) => {
+      rad.dx = D.position.dx - bumper.position.dx;
+      rad.dy = D.position.dy - bumper.position.dy;
+      tan.dx = -D.position.dy + bumper.position.dy;
+      tan.dy = D.position.dx - bumper.position.dx;
+
+      if ((rad.magnitude - D.radius - bumper.radius) <= 0) {
+        bumper.color1 = getRandomColor();
+        bumper.color2 = getRandomColor();
+        turn = true;
+      }
+      else {
+        bumper.color1 = ballColors[0];
+        bumper.color2 = ballColors[1];
+        turn = false;
+      }
+
+      rad.magnitude = 1;
+      tan.magnitude = 1;
+      rad.magnitude = vector.dot(rad);
+      tan.magnitude = vector.dot(tan);
+
+      if (turn) {
+        rad.dx    *= -1;
+        rad.dy    *= -1;
+        vector.dx = (rad.dx + tan.dx);
+        vector.dy = (rad.dy + tan.dy);
+        D.velocity.dx = vector.dx;
+        D.velocity.dy = vector.dy;
+        turn = false;
+      }
+
+      bumper.draw(context);
+    });
 
     D.update();
     D.bounce(bounds);
     D.draw(context);
 }
 
-setup();
+//setup();
 animate();
 
 function getRandomMin(min, max) {
