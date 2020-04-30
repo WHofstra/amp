@@ -9,7 +9,7 @@ canvas.height = height;
 
 let bounds = new Vector2d(canvas.width, canvas.height);
 
-let amount = 4,
+let amount = 36,
       rowX = 9,
     radius = 30,
 rowDistance = 3.5 * radius,
@@ -17,7 +17,7 @@ rowDistance = 3.5 * radius,
     beginY = 2 * radius;
 
 let dots = [];
-let colors = [ getRandomColor(), getRandomColor() ];//, getRandomColor(), getRandomColor() ];
+let colors = [ getRandomColor(), getRandomColor() ];
 let balls = fillArray();
 
 function fillArray() {
@@ -41,7 +41,7 @@ function fillArray() {
 
 function pushBalls(array, xPos, yPos, ind) {
   let A = new DPoint(new Vector2d(xPos, yPos), radius, colors[0], colors[1],
-                     new Vector2d(getRandomMin(-10, 10) * 20, getRandomMin(-10, 10) * 20),
+                     new Vector2d(getRandomMin(-10, 10) * 50, getRandomMin(-10, 10) * 50),
                      new Vector2d(0, 0));
   A.rad = new Vector2d(1, 1);
   A.tan = new Vector2d(1, 1);
@@ -52,23 +52,39 @@ function pushBalls(array, xPos, yPos, ind) {
   return array;
 }
 
-/*
-function changeColors(obj) {
-  obj.color1 = colors[2];
-  obj.color2 = colors[3];
+function changeMagnitude(molec, anotherMolec) {
+  molec.rad.magnitude        = 0.5;
+  anotherMolec.rad.magnitude = 0.5;
+  molec.tan.magnitude        = 0.5;
+  anotherMolec.tan.magnitude = 0.5;
+
+  molec.rad.magnitude        = molec.velocity.dot(molec.rad);
+  anotherMolec.rad.magnitude = anotherMolec.velocity.dot(anotherMolec.rad);
+  molec.tan.magnitude        = molec.velocity.dot(molec.tan);
+  anotherMolec.tan.magnitude = anotherMolec.velocity.dot(anotherMolec.tan);
 }
 
-function changeBack(obj) {
-  obj.color1 = colors[0];
-  obj.color2 = colors[1];
-}//*/
+function changeVelocity(molec, anotherMolec) {
+  let tempRad = [ molec.velocity.dx, molec.velocity.dy ];
+
+  //Radial Switch
+  molec.rad.dx = anotherMolec.rad.dx;
+  molec.rad.dy = anotherMolec.rad.dy;
+  anotherMolec.rad.dx = tempRad[0];
+  anotherMolec.rad.dy = tempRad[1];
+
+  //Velocity Change
+  molec.velocity.dx        = (molec.rad.dx + molec.tan.dx);
+  molec.velocity.dy        = (molec.rad.dy + molec.tan.dy);
+  anotherMolec.velocity.dx = (anotherMolec.rad.dx + anotherMolec.tan.dx);
+  anotherMolec.velocity.dy = (anotherMolec.rad.dy + anotherMolec.tan.dy);
+}
 
 function animate() {
     context.clearRect(0, 0, width, height);
     requestAnimationFrame(animate);
 
     balls.map((mol) => {
-      mol.collision = false;
       mol.update();
       mol.bounce(bounds);
 
@@ -88,12 +104,17 @@ function animate() {
             mol.collision = true;
             anotherMol.collision = true;
             //console.log(mol.index + " and " + anotherMol.index + " touched eachother, eww."); //Debug
+          } else {
+            mol.collision = false;
+            anotherMol.collision = false;
           }
 
-          mol.rad.magnitude = 1;
-          anotherMol.rad.magnitude = 1;
-          mol.tan.magnitude = 1;
-          anotherMol.tan.magnitude = 1;
+          changeMagnitude(mol, anotherMol);
+
+          if (mol.collision || anotherMol.collision)
+          {
+            changeVelocity(mol, anotherMol);
+          }
         }
       });
 
