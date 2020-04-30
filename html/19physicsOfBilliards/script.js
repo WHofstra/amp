@@ -25,7 +25,6 @@ let B = new DPoint(new Vector2d(getRandomMin(radius, canvas.width - radius), get
 
 let head = new Vector2d(radius / 2, radius / 2 + 5),
     tail = new Vector2d(radius + headLength, headLength);
-let diff = [ new Vector2d(1, 1), new Vector2d(1, 1) ];
 let turn = false;
 
 function setup() {
@@ -51,18 +50,13 @@ function setup() {
 }
 
 function arrowCalculations() {
-  diff[0].differenceVector(B.position, A.position);
-  diff[1].differenceVector(A.position, B.position);
-
   A.vector.vec.dx = A.velocity.dx;
   A.vector.vec.dy = A.velocity.dy;
   B.vector.vec.dx = B.velocity.dx;
   B.vector.vec.dy = B.velocity.dy;
 
-  A.rad.vec.dx = diff[0].dx;
-  A.rad.vec.dy = diff[0].dy;
-  B.rad.vec.dx = diff[1].dx;
-  B.rad.vec.dy = diff[1].dy;
+  A.rad.vec.differenceVector(B.position, A.position);
+  B.rad.vec.differenceVector(A.position, B.position);
 
   A.tan.vec.perpendicular(A.rad.vec);
   B.tan.vec.perpendicular(B.rad.vec);
