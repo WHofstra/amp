@@ -18,6 +18,7 @@ rowDistance = 3.5 * radius,
 
 let dots = [];
 let colors = [ getRandomColor(), getRandomColor() ];
+let addVec = [ new Vector2d(0, 0), new Vector2d(0, 0) ];
 let balls = fillArray();
 
 function fillArray() {
@@ -52,32 +53,33 @@ function pushBalls(array, xPos, yPos, ind) {
   return array;
 }
 
-function changeMagnitude(molec, anotherMolec) {
-  molec.rad.magnitude        = 0.5;
-  anotherMolec.rad.magnitude = 0.5;
-  molec.tan.magnitude        = 0.5;
-  anotherMolec.tan.magnitude = 0.5;
+/*
+function addVectors(vector, posit, velocit) {
+  vector.dx = velocit.dx;
+  vector.dy = velocit.dy;
+  vector.add(posit);
+  return vector;
+}//*/
+
+function changeMagnitude(molec) {
+  molec.rad.magnitude        = 1;
+  molec.tan.magnitude        = 1;
 
   molec.rad.magnitude        = molec.velocity.dot(molec.rad);
-  anotherMolec.rad.magnitude = anotherMolec.velocity.dot(anotherMolec.rad);
   molec.tan.magnitude        = molec.velocity.dot(molec.tan);
-  anotherMolec.tan.magnitude = anotherMolec.velocity.dot(anotherMolec.tan);
 }
 
-function changeVelocity(molec, anotherMolec) {
-  let tempRad = [ molec.velocity.dx, molec.velocity.dy ];
-
-  //Radial Switch
-  molec.rad.dx = anotherMolec.rad.dx;
-  molec.rad.dy = anotherMolec.rad.dy;
-  anotherMolec.rad.dx = tempRad[0];
-  anotherMolec.rad.dy = tempRad[1];
+function changeVelocity(molec) {
+    //Radial Switch
+  molec.rad.dx *= -1;// anotherMolec.rad.dx;
+  molec.rad.dy *= -1;// anotherMolec.rad.dy;
+  //anotherMolec.rad.dx = tempRad[0];
+  //anotherMolec.rad.dy = tempRad[1];
 
   //Velocity Change
-  molec.velocity.dx        = (molec.rad.dx + molec.tan.dx);
-  molec.velocity.dy        = (molec.rad.dy + molec.tan.dy);
-  anotherMolec.velocity.dx = (anotherMolec.rad.dx + anotherMolec.tan.dx);
-  anotherMolec.velocity.dy = (anotherMolec.rad.dy + anotherMolec.tan.dy);
+  molec.velocity = new Vector2d(0, 0);
+  molec.velocity.add(molec.rad);
+  molec.velocity.add(molec.tan);
 }
 
 function animate() {
@@ -90,33 +92,37 @@ function animate() {
 
       balls.map((anotherMol) => {
         if (mol.index != anotherMol.index) {
+          //addVec[0] = addVectors(addVec[0], mol.position, mol.velocity);
+          //addVec[1] = addVectors(addVec[1], anotherMol.position, anotherMol.velocity);
+
           //Radials
+          //mol.rad.differenceVector(addVec[1], addVec[0]);
+          //anotherMol.rad.differenceVector(addVec[0], addVec[1]);
           mol.rad.differenceVector(anotherMol.position, mol.position);
           anotherMol.rad.differenceVector(mol.position, anotherMol.position);
 
           //Tangents
           mol.tan.perpendicular(mol.rad);
-          anotherMol.tan.perpendicular(anotherMol.rad);
 
-          if ((mol.rad.magnitude - (2 * radius) < 0) ||
-              (anotherMol.rad.magnitude - (2 * radius) < 0))
+          if (((mol.rad.magnitude - (2 * radius)) <= 0) ||
+              ((anotherMol.rad.magnitude - (2 * radius)) <= 0))
           {
-            mol.collision = true;
+            mol.collision        = true;
             anotherMol.collision = true;
             //console.log(mol.index + " and " + anotherMol.index + " touched eachother, eww."); //Debug
-          } else {
-            mol.collision = false;
-            anotherMol.collision = false;
           }
-
-          changeMagnitude(mol, anotherMol);
-
-          if (mol.collision || anotherMol.collision)
-          {
-            changeVelocity(mol, anotherMol);
+          else {
+            mol.collision        = false;
+            anotherMol.collision = false;
           }
         }
       });
+      changeMagnitude(mol);
+
+      if (mol.collision)
+      {
+        changeVelocity(mol);
+      }
 
       mol.draw(context);
     });
