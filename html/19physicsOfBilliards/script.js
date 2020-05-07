@@ -14,13 +14,13 @@ let bounds = new Vector2d(canvas.width, canvas.height);
 
 let A = new DPoint(new Vector2d(getRandomMin(radius, canvas.width - radius), getRandomMin(radius, canvas.height - radius)),
                    radius, getRandomColor(), getRandomColor(),
-                   //new Vector2d(getRandomMin(-30, 30) * 10, getRandomMin(-30, 30) * 10),
-                   new Vector2d(60, 90),
+                   new Vector2d(getRandomMin(-30, 30) * 10, getRandomMin(-30, 30) * 10),
+                   //new Vector2d(60, 90),
                    new Vector2d(0, 0));
 let B = new DPoint(new Vector2d(getRandomMin(radius, canvas.width - radius), getRandomMin(radius, canvas.height - radius)),
                    radius, getRandomColor(), getRandomColor(),
-                   //new Vector2d(getRandomMin(-30, 30) * 10, getRandomMin(-30, 30) * 10),
-                   new Vector2d(240, 180),
+                   new Vector2d(getRandomMin(-30, 30) * 10, getRandomMin(-30, 30) * 10),
+                   //new Vector2d(240, 180),
                    new Vector2d(0, 0));
 
 let head = new Vector2d(radius / 2, radius / 2 + 5),

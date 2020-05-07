@@ -18,7 +18,7 @@ rowDistance = 3.5 * radius,
 
 let dots = [];
 let colors = [ getRandomColor(), getRandomColor() ];
-let addVec = [ new Vector2d(0, 0), new Vector2d(0, 0) ];
+let addVec = [ new Vector2d(1, 1), new Vector2d(1, 1), new Vector2d(1, 1) ];
 let balls = fillArray();
 
 function fillArray() {
@@ -53,33 +53,26 @@ function pushBalls(array, xPos, yPos, ind) {
   return array;
 }
 
-/*
-function addVectors(vector, posit, velocit) {
-  vector.dx = velocit.dx;
-  vector.dy = velocit.dy;
-  vector.add(posit);
-  return vector;
-}//*/
-
-function changeMagnitude(molec) {
-  molec.rad.magnitude        = 1;
-  molec.tan.magnitude        = 1;
-
-  molec.rad.magnitude        = molec.velocity.dot(molec.rad);
-  molec.tan.magnitude        = molec.velocity.dot(molec.tan);
+function addVectors(posit, velocit) {
+  let tempVec = new Vector2d(1, 1);
+  tempVec.dx = velocit.dx;
+  tempVec.dy = velocit.dy;
+  tempVec.add(posit);
+  return tempVec;
 }
 
-function changeVelocity(molec) {
-    //Radial Switch
-  molec.rad.dx *= -1;// anotherMolec.rad.dx;
-  molec.rad.dy *= -1;// anotherMolec.rad.dy;
-  //anotherMolec.rad.dx = tempRad[0];
-  //anotherMolec.rad.dy = tempRad[1];
+function changeMagnitude(molec, anotherMolec) {
+  molec.rad.magnitude        = 1;
+  anotherMolec.rad.magnitude = 1;
+}
 
-  //Velocity Change
-  molec.velocity = new Vector2d(0, 0);
-  molec.velocity.add(molec.rad);
-  molec.velocity.add(molec.tan);
+function changeRad(molec, anotherMolec) {
+  //Radial Switch
+  addVec[2] = new Vector2d(molec.rad.dx, molec.rad.dy);
+  molec.rad.dx = anotherMolec.rad.dx;
+  molec.rad.dy = anotherMolec.rad.dy;
+  anotherMolec.rad.dx = addVec[2].dx;
+  anotherMolec.rad.dy = addVec[2].dy;
 }
 
 function animate() {
@@ -92,38 +85,32 @@ function animate() {
 
       balls.map((anotherMol) => {
         if (mol.index != anotherMol.index) {
-          //addVec[0] = addVectors(addVec[0], mol.position, mol.velocity);
-          //addVec[1] = addVectors(addVec[1], anotherMol.position, anotherMol.velocity);
+          addVec[0] = new Vector2d(1, 1);
+          addVec[1] = new Vector2d(1, 1);
+          addVec[0] = addVectors(mol.position, mol.velocity);
+          addVec[1].differenceVector(anotherMol.position, mol.position);
 
-          //Radials
-          //mol.rad.differenceVector(addVec[1], addVec[0]);
-          //anotherMol.rad.differenceVector(addVec[0], addVec[1]);
-          mol.rad.differenceVector(anotherMol.position, mol.position);
-          anotherMol.rad.differenceVector(mol.position, anotherMol.position);
+          if ((addVec[1].magnitude - (2 * radius)) <= 0) {
+            //Radials
+            mol.rad.dx        = addVec[1].dx;
+            mol.rad.dy        = addVec[1].dy;
+            anotherMol.rad.dx = addVec[1].dx;
+            anotherMol.rad.dy = addVec[1].dy;
 
-          //Tangents
-          mol.tan.perpendicular(mol.rad);
+            changeMagnitude(mol, anotherMol);
 
-          if (((mol.rad.magnitude - (2 * radius)) <= 0) ||
-              ((anotherMol.rad.magnitude - (2 * radius)) <= 0))
-          {
-            mol.collision        = true;
-            anotherMol.collision = true;
+            //Tangents
+            mol.tan.perpendicular(mol.rad);
+            anotherMol.tan.perpendicular(anotherMol.rad);
+
+            changeRad(mol, anotherMol);
+
+            //Change velocity
+
             //console.log(mol.index + " and " + anotherMol.index + " touched eachother, eww."); //Debug
-          }
-          else {
-            mol.collision        = false;
-            anotherMol.collision = false;
           }
         }
       });
-      changeMagnitude(mol);
-
-      if (mol.collision)
-      {
-        changeVelocity(mol);
-      }
-
       mol.draw(context);
     });
 }
