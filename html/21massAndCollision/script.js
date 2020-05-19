@@ -7,20 +7,22 @@ const height = window.innerHeight;
 canvas.width = width;
 canvas.height = height;
 
-let radius = 30,
-     scale = 0.75,
+let radius = [ 20, 50 ];
+let scale  = 0.75,
 headLength = 20;
 let bounds = new Vector2d(canvas.width, canvas.height);
 
-let A = new DPoint(new Vector2d(getRandomMin(radius, canvas.width - radius), getRandomMin(radius, canvas.height - radius)),
-                   radius, getRandomColor(), getRandomColor(),
+let A = new DPoint(new Vector2d(getRandomMin(radius[0], canvas.width - radius[0]),
+                                getRandomMin(radius[0], canvas.height - radius[0])),
+                   radius[0], getRandomColor(), getRandomColor(),
                    new Vector2d(getRandomMin(-30, 30) * 10, getRandomMin(-30, 30) * 10));
-let B = new DPoint(new Vector2d(getRandomMin(radius, canvas.width - radius), getRandomMin(radius, canvas.height - radius)),
-                   radius, getRandomColor(), getRandomColor(),
+let B = new DPoint(new Vector2d(getRandomMin(radius[1], canvas.width - radius[1]),
+                                getRandomMin(radius[1], canvas.height - radius[1])),
+                   radius[1], getRandomColor(), getRandomColor(),
                    new Vector2d(getRandomMin(-30, 30) * 10, getRandomMin(-30, 30) * 10));
 
-let head = new Vector2d(radius / 2, radius / 2 + 5),
-    tail = new Vector2d(radius + headLength, headLength);
+let head = new Vector2d(15, 20),
+    tail = new Vector2d(30 + headLength, headLength);
 let turn = false;
 
 function setup() {
@@ -43,6 +45,9 @@ function setup() {
   B.rad.vec    = new Vector2d(1, 1);
   A.tan.vec    = new Vector2d(1, 1);
   B.tan.vec    = new Vector2d(1, 1);
+
+  A.mass = A.radius * A.radius;
+  B.mass = B.radius * B.radius;
 }
 
 function arrowCalculations() {
