@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>3DsolarSystem</title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+		<script>
+			// Our Javascript will go here.
+			let scene = new THREE.Scene();
+			let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+			let renderer = new THREE.WebGLRenderer();
+
+			renderer.SetSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+			let loader = new THREE.TextureLoader();
+
+			let testGeo = new THREE.BoxGeometry(1, 1, 1);
+			let testMat = new THREE.MeshBasicMaterial({color:0xffffff, wireframe:true});
+			let testMesh = new THREE.Mesh(testGeo, testMat);
+
+			let sphereGeo = new THREE.ShpereGeometry(2, 16, 16);
+			let earthMat = new THREE.MeshBasicMaterial({map:loader.load('media/map.jpg')});
+			let earth = new THREE.Mesh(sphereGeo, earthMat);
+
+			let directLight = new THREE.DirectionalLight(0xffffff, 0.5);
+
+			directLight.position.y = -10;
+			camera.position.z = 1;
+			earth.position.x = 2;
+
+			scene.add(directLight);
+			scene.add(testMesh);
+			scene.add(earth);
+
+			function animate(){
+				requestAnimationFrame(animate);
+				renderer.render(scene, camera);
+
+				testMesh.rotation.x += 0.01;
+				testMesh.rotation.y += 0.01;
+			}
+
+			animate();
+		</script>
+	</body>
+</html>
