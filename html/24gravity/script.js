@@ -7,29 +7,81 @@ const height = window.innerHeight;
 canvas.width = width;
 canvas.height = height;
 
-let moon, earth;
+let atom = [,];
+let bounds = new Vector2d(width, height);
 
-earth = new DPoint(new Vector2d(width / 2, height / 2), 30,
-                   getRandomColor(), getRandomColor(),
-                   new Vector2d(0, 0), new Vector2d(0, 0));
-moon = new DPoint(new Vector2d(width / 2 - 400, height / 2 - 400), 10,
-                   getRandomColor(), getRandomColor(),
-                   new Vector2d(0, 0), new Vector2d(0, 0));
+function setup() {
+  atom[0] = initPart(1, 30, 300.0); //Core (protons and neutrons)
+  atom[1] = initPart(3, 10, 100.0); //Electrons
+
+  //Set properties
+  atom[1] = setParent(atom[1], atom[0][0]);
+  atom[0][0].velocity = new Vector2d(0, 0);
+  atom[1][0].position.dx += 100;
+  atom[1][1].position.dx += 105 + atom[1][0].radius + atom[1][1].radius;
+  atom[1][2].position.dx += 110 + atom[1][1].radius + atom[1][2].radius;
+
+  console.log(atom);
+}
+
+function initPart(amount, radius, mass) {
+  let array = [];
+
+  for (let i = 0; i < amount; i++) {
+    let part = new DPoint(new Vector2d(width / 2, height / 2), radius, getRandomColor(), getRandomColor(),
+                          new Vector2d(getRandomMin(-10, 10) * 100, getRandomMin(-10, 10) * 100), new Vector2d(0, 0));
+    part.mass = mass;
+    array.push(part);
+  }
+  return array;
+}
+
+function setParent(list, parentToSet) {
+  for (let i = 0; i < list.length; i++) {
+    list[i].parent = parentToSet;
+  }
+  return list;
+}
+
+function setDifferenceTo(thisPos, parentPos) {
+  let diff = new Vector2d(thisPos.dx - parentPos.dx, thisPos.dy - parentPos.dy);
+  return diff;
+}
+
+function setAccelleration(diff, mass, parentMass) {
+  let tempMagn = new Vector2d(parentMass - mass, parentMass - parentMass);
+  let acVec = new Vector2d((-diff.dx / 2) * (tempMagn.magnitude / 5),
+                           (-diff.dy / 2) * (tempMagn.magnitude / 5));
+  return acVec;
+}
 
 function animate(){
   context.clearRect(0, 0, width, height);
   requestAnimationFrame(animate);
 
-  //Acceleraion is Radial/Difference
-  //Distance Magnitude = 800/(Distance * Distance);
+  //*
+  atom[1].map((dot)=>{
+    if (dot.parent != null) {
+      dot.difference = setDifferenceTo(dot.position, dot.parent.position);
+      dot.accell = setAccelleration(dot.difference, dot.mass, dot.parent.mass);
+    }
+  });//*/
 
-  earth.update();
-  moon.update();
-  earth.draw(context);
-  moon.draw(context);
+  for (let i = 0; i < atom.length; i++) {
+    atom[i].map((dot)=>{
+      dot.bounce(bounds);
+      dot.update();
+      dot.draw(context);
+    });
+  }
 }
 
+setup();
 animate();
+
+function getRandomMin(min, max){
+  return Math.floor(Math.random()*(max - min) + min);
+}
 
 function getRandomColor()
 {
