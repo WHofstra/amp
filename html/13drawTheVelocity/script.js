@@ -29,7 +29,7 @@ function animate(){
   requestAnimationFrame(animate);
   context.clearRect(0, 0, canvas.width, canvas.height);
 
-  for (let i = 0; i < points.length; i++){
+  /*for (let i = 0; i < points.length; i++){
     points[i].bounce(bounds);
     points[i].update();
     arrows[i].position = points[i].position;
@@ -38,7 +38,7 @@ function animate(){
 
     arrows[i].draw(context);
     points[i].draw(context);
-  }
+  }*/
 }
 
 animate();

@@ -16,11 +16,11 @@ let A = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 0.9) * cent
 let B = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 1.7) * centerRad)),
                   (canvas.height/2 + (Math.sin(Math.PI * 1.7) * centerRad))), 20,
                   "#020202", "#18185C", '水', false,
-                  "#FFFFFF", A.lineClr2);
+                  "#000000", A.lineClr2);
 let C = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 0.5) * centerRad)),
                   (canvas.height/2 + (Math.sin(Math.PI * 0.5) * centerRad))), 20,
                   "#790600", "#FF2600", '火', false,
-                  "#FFFFFF", A.lineClr2);
+                  "#000000", A.lineClr2);
 let D = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 1.3) * centerRad)),
                   (canvas.height/2 + (Math.sin(Math.PI * 1.3) * centerRad))), 20,
                   "#B5D8E1", "#FDFDFD", '金', false,
@@ -28,7 +28,7 @@ let D = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 1.3) * cent
 let E = new Point(new Vector2d((canvas.width/2 + (Math.cos(Math.PI * 0.1) * centerRad)),
                   (canvas.height/2 + (Math.sin(Math.PI * 0.1) * centerRad))), 20,
                   "#00794B", "#00BB96", '木', false,
-                  "#FFFFFF", A.lineClr2);
+                  "#000000", A.lineClr2);
 
 let F;
 let difference = new Vector2d(0, 0);
