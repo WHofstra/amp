@@ -94,8 +94,8 @@ function animate() {
             //Radials
             mol.rad.dx        = addVec[1].dx;
             mol.rad.dy        = addVec[1].dy;
-            anotherMol.rad.dx = addVec[1].dx;
-            anotherMol.rad.dy = addVec[1].dy;
+            anotherMol.rad.dx = -addVec[1].dx;
+            anotherMol.rad.dy = -addVec[1].dy;
 
             changeMagnitude(mol, anotherMol);
 
@@ -106,6 +106,7 @@ function animate() {
             changeRad(mol, anotherMol);
 
             //Change velocity
+
 
             //console.log(mol.index + " and " + anotherMol.index + " touched eachother, eww."); //Debug
           }

@@ -55,6 +55,37 @@ function setAccelleration(diff, mass, parentMass) {
   return acVec;
 }
 
+/*
+function checkCollision(ball){
+  if (dot.difference.magnitude <= (dot.parent.radius + dot.radius))
+  {
+    dot.rad = new Vector2d(0, 0);
+    dot.parent.rad = new Vector2d(0, 0);
+    dot.tan = new Vector2d(0, 0);
+    dot.parent.tan = new Vector2d(0, 0);
+
+    dot.rad.equals(dot.difference);
+    dot.parent.rad.equals(dot.difference);
+    dot.parent.rad *= -1;
+    dot.rad.magnitude = 1;
+    dot.parent.rad.magnitude = 1;
+
+    dot.tan.perpendicular(dot.rad);
+    dot.parent.tan.perpendicular(dot.parent.rad);
+
+    dot.rad.magnitude = dot.rad.dot(new Vector2d(dot.velocity.dx + dot.accell.dx, dot.velocity.dy + dot.accell.dy));
+    dot.parent.rad.magnitude = dot.parent.rad.dot(new Vector2d(dot.parent.velocity.dx + dot.parent.accell.dx, dot.parent.velocity.dy + dot.parent.accell.dy));
+
+    let tempRad = new Vector2d(0, 0);
+    tempRad.equals(dot.parent.rad);
+    dot.parent.rad.equals(dot.rad);
+    dot.rad.equals(tempRad);
+
+    dot.velocity.equals(dot.tan);
+    dot.velocity.add(dot.rad);
+  }
+}//*/
+
 function animate(){
   context.clearRect(0, 0, width, height);
   requestAnimationFrame(animate);
